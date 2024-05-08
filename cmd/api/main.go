@@ -1,16 +1,23 @@
 package main
 
 import (
+	"net/http"
+
+	"github.com/JensonCode/tentrek/internal/database"
 	"github.com/JensonCode/tentrek/internal/server"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("error loading .env file")
+
+	if _, err := database.InitPostgreSQL(); err != nil {
+		panic(err)
 	}
 
 	server := server.NewServer()
+
+	server.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello"))
+	})
+
 	server.ListenAndServe()
 }

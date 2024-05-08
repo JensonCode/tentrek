@@ -25,6 +25,7 @@ func NewServer() *Server {
 }
 
 func (s *Server) ListenAndServe() error {
-	log.Printf("TenTrek api server listening%s", s.Port)
+	log.Println("TenTrek api server listening")
+
 	return http.ListenAndServe(s.Port, s.Router)
 }
