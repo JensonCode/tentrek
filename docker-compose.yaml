@@ -12,6 +12,13 @@ services:
       DB_USER: 'tentrek'
       DB_PASSWORD: 'tentrek'
       DB_DBNAME: 'tentrek_db'
+      APP_BASE_URL: 'http://localhost:3000'
+      # add your OTP email sender
+      SMTP_SENDER: ''
+      SMTP_SENDER_PASSWORD: ''
+      SMTP_HOST: ''
+      SMTP_PORT: ''
+      JWT_SECRET: 'jwtjwtjwt'
     ports:
       - 8080:8080
     depends_on:
