@@ -32,3 +32,13 @@ func GenerateRandomPassword() string {
 
 	return string(password)
 }
+
+func GenerateOTP() string {
+	otp := make([]byte, 6)
+
+	for i := range otp {
+		otp[i] = numBytes[rand.Intn(len(numBytes))]
+	}
+
+	return string(otp)
+}
