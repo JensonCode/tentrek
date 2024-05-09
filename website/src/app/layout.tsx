@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import "@/styles/globals.css";
 
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={cn(`font-sans ${inter.variable}`, "bg-secondary")}>
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
