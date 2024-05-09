@@ -28,5 +28,25 @@ func InitPostgreSQL() (*PostgreSQL, error) {
 
 	psql := &PostgreSQL{DB: db}
 
+	if err := psql.migrate(); err != nil {
+		return nil, err
+	}
+
 	return psql, nil
+}
+
+func (p *PostgreSQL) Close() {
+	log.Println("** Disconnecting Postgres DB **")
+	p.DB.Close()
+}
+
+func (p *PostgreSQL) migrate() error {
+	log.Println("** Migrate tables **")
+	for _, query := range migration {
+		_, err := p.DB.Exec(query)
+		if err != nil {
+			return fmt.Errorf("failed to migrate: %s\n query: %q", err, query)
+		}
+	}
+	return nil
 }
