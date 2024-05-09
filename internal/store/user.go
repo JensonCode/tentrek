@@ -2,18 +2,8 @@ package store
 
 import (
 	"database/sql"
-	"errors"
 
-	err "github.com/JensonCode/tentrek/internal/error"
 	"github.com/JensonCode/tentrek/internal/model"
-)
-
-const (
-	ERR_EMAIL_USED  = err.NewError("store user: " + "email has been used")
-	ERR_INIT_USER   = err.NewError("store user: " + "initiate new user failed")
-	ERR_INSERT_USER = err.NewError("store user: " + "insert user to DB failed")
-	ERR_SCAN_USER   = err.NewError("store user: " + "scan user failed")
-	ERR_FIND_USER   = err.NewError("store user: " + "user not found")
 )
 
 type UserStore struct {
@@ -27,13 +17,13 @@ func (s *UserStore) InsertUser(req *model.CreateUserRequest) (*model.User, error
 		return nil, err
 	}
 	if exist {
-		return nil, errors.New(ERR_EMAIL_USED.Error())
+		return nil, err
 	}
 
 	var newUser = new(model.User)
 	err = newUser.Init(req)
 	if err != nil {
-		return nil, errors.New(ERR_INIT_USER.Error())
+		return nil, err
 	}
 
 	query := `INSERT INTO users 
@@ -51,7 +41,7 @@ func (s *UserStore) InsertUser(req *model.CreateUserRequest) (*model.User, error
 		newUser.UpdatedAt,
 	)
 	if err != nil {
-		return nil, errors.New(ERR_INSERT_USER.Error())
+		return nil, err
 	}
 
 	return newUser, nil
@@ -64,8 +54,42 @@ func (s *UserStore) IsExist(email string) (bool, error) {
 
 	err := s.db.QueryRow(query, email).Scan(&count)
 	if err != nil {
-		return false, errors.New(ERR_SCAN_USER.Error())
+		return false, err
 	}
 
 	return count > 0, nil
+}
+
+func (s *UserStore) FindByField(field string, value any) (*model.User, error) {
+
+	query := "SELECT * FROM users WHERE " + field + " = $1"
+
+	row := s.db.QueryRow(query, value)
+
+	user, err := scanRow(row)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func scanRow(row *sql.Row) (*model.User, error) {
+	user := new(model.User)
+
+	err := row.Scan(
+		&user.UID,
+		&user.Email,
+		&user.Password,
+		&user.Username,
+		&user.Avatar,
+		&user.Provider,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
