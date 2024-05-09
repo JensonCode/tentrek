@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/JensonCode/tentrek/api"
+	"github.com/JensonCode/tentrek/internal/auth"
 	"github.com/JensonCode/tentrek/internal/database"
 	"github.com/JensonCode/tentrek/internal/server"
 	"github.com/JensonCode/tentrek/internal/store"
@@ -13,7 +14,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db.Close()
+	defer db.Close()
+
+	auth.NewOAuth()
 
 	server := server.NewServer()
 
