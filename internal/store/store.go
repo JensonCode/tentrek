@@ -4,6 +4,7 @@ import "database/sql"
 
 type Store struct {
 	UserStore *UserStore
+	AuthStore *AuthStore
 }
 
 func NewStore(db *sql.DB) *Store {
@@ -11,5 +12,6 @@ func NewStore(db *sql.DB) *Store {
 		UserStore: &UserStore{
 			db: db,
 		},
+		AuthStore: NewAuthStore(),
 	}
 }
