@@ -4,17 +4,22 @@ import (
 	"github.com/JensonCode/tentrek/api"
 	"github.com/JensonCode/tentrek/internal/database"
 	"github.com/JensonCode/tentrek/internal/server"
+	"github.com/JensonCode/tentrek/internal/store"
 )
 
 func main() {
 
-	if _, err := database.InitPostgreSQL(); err != nil {
+	db, err := database.InitPostgreSQL()
+	if err != nil {
 		panic(err)
 	}
+	db.Close()
 
 	server := server.NewServer()
 
-	api.RegisterRoutes(server.Router)
+	store := store.NewStore(db.DB)
+
+	api.RegisterRoutes(server.Router, store)
 
 	server.ListenAndServe()
 }
