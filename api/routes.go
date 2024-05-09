@@ -3,12 +3,13 @@ package api
 import (
 	"net/http"
 
+	"github.com/JensonCode/tentrek/internal/store"
 	"github.com/gorilla/mux"
 )
 
-type Handler func(http.ResponseWriter, *http.Request) error
+type HandlerFunc func(http.ResponseWriter, *http.Request) error
 
-func Serve(h Handler, middlewares ...Middleware) http.HandlerFunc {
+func Serve(h HandlerFunc, middlewares ...Middleware) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := MiddlewareChain(h, middlewares...)(w, r); err != nil {
@@ -17,10 +18,13 @@ func Serve(h Handler, middlewares ...Middleware) http.HandlerFunc {
 	}
 }
 
-func RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/", Serve(handleHello, WithCors))
+type Handler struct {
+	store *store.Store
 }
 
-func handleHello(w http.ResponseWriter, r *http.Request) error {
-	return WriteResponse(w, 200, "hello")
+func RegisterRoutes(router *mux.Router, store *store.Store) {
+	h := &Handler{store: store}
+
+	router.HandleFunc("/auth/user/{service}", Serve(h.AuthHandlers))
+
 }

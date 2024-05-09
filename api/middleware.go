@@ -5,9 +5,9 @@ import (
 	"os"
 )
 
-type Middleware func(Handler) Handler
+type Middleware func(HandlerFunc) HandlerFunc
 
-func MiddlewareChain(h Handler, middlewares ...Middleware) Handler {
+func MiddlewareChain(h HandlerFunc, middlewares ...Middleware) HandlerFunc {
 	for _, m := range middlewares {
 		h = m(h)
 	}
@@ -15,7 +15,7 @@ func MiddlewareChain(h Handler, middlewares ...Middleware) Handler {
 	return h
 }
 
-func WithCors(h Handler) Handler {
+func WithCors(h HandlerFunc) HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) error {
 
 		allowedOrigin := os.Getenv("APP_BASE_URL")
