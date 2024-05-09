@@ -1,7 +1,8 @@
+# for dev use
 services:
   api:
     container_name: api
-    image: tentrek-api:1.0.0
+    image: tentrek-api:dev
     build:
       context: .
       dockerfile: dockerfile
