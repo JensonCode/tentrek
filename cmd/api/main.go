@@ -1,8 +1,7 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/JensonCode/tentrek/api"
 	"github.com/JensonCode/tentrek/internal/database"
 	"github.com/JensonCode/tentrek/internal/server"
 )
@@ -15,9 +14,7 @@ func main() {
 
 	server := server.NewServer()
 
-	server.Router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello"))
-	})
+	api.RegisterRoutes(server.Router)
 
 	server.ListenAndServe()
 }
