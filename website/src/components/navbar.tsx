@@ -2,7 +2,7 @@ import { twMerge } from "tailwind-merge";
 
 import { Button } from "@/components/ui/button";
 import Logo from "./logo";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 export default function Navbar() {
   return (
