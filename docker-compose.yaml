@@ -1,11 +1,11 @@
 # for dev use
 # do not leak
 services:
-  api:
-    container_name: api
+  app:
+    container_name: app
     image: tentrek-api:dev
     build:
-      context: internal/.
+      context: app
       dockerfile: dockerfile
     env_file:
       - .env

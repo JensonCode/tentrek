@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/JensonCode/tentrek/configs"
@@ -28,5 +29,6 @@ func Run(store *store.Store) {
 
 	server.RegisterRoutes()
 
+	log.Printf("Tentrek API server running on Port%s", server.port)
 	http.ListenAndServe(server.port, server.router)
 }
