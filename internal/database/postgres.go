@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/JensonCode/tentrek/internal/configs"
+	"github.com/JensonCode/tentrek/configs"
 	_ "github.com/lib/pq"
 )
 

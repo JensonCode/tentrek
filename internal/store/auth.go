@@ -5,18 +5,18 @@ import (
 	"sync"
 	"time"
 
-	"github.com/JensonCode/tentrek/internal/model"
+	"github.com/JensonCode/tentrek/model"
 	"github.com/google/uuid"
 )
-
-type AuthStore struct {
-	OTP  map[string]OTPMapValue
-	Lock sync.Mutex
-}
 
 type OTPMapValue struct {
 	otp string
 	model.CreateUserRequest
+}
+
+type AuthStore struct {
+	OTP  map[string]OTPMapValue
+	Lock sync.Mutex
 }
 
 func NewAuthStore() *AuthStore {
@@ -46,7 +46,6 @@ func (s *AuthStore) StoreOTP(req model.CreateUserRequest, otp string) string {
 		s.Lock.Lock()
 		delete(s.OTP, uuid)
 		s.Lock.Unlock()
-
 	}()
 
 	return uuid

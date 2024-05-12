@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/JensonCode/tentrek/internal/auth"
+	"github.com/JensonCode/tentrek/helpers"
 	"github.com/google/uuid"
 )
 
@@ -30,10 +30,10 @@ func (u *User) Init(req *CreateUserRequest) error {
 	uuid := uuid.New()
 
 	if req.Provider != "app" {
-		req.Password = auth.GenerateRandomPassword()
+		req.Password = helpers.GenerateRandomPassword()
 	}
 
-	hashed, err := auth.EncryptPassword(req.Password)
+	hashed, err := helpers.HashPassword(req.Password)
 	if err != nil {
 		return err
 	}

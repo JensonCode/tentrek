@@ -5,3 +5,4 @@ website
 .git
 .gitignore
 .env
+.env.prod

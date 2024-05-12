@@ -18,6 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        disable: "bg-gray-300 text-black",
+        googleOAuth: "bg-blue-400 text-primary-foreground hover:bg-blue-400/90",
       },
       size: {
         default: "h-10 px-4 py-2 max-md:h-9 max-md:rounded-md max-md:px-3",
@@ -25,6 +27,7 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md sm:px-8 px-4",
         xl: "h-14 rounded-md sm:px-8 px-4",
         icon: "h-10 w-10",
+        googleOAuth: "h-11 px-4 sm:px-6",
       },
     },
     defaultVariants: {

@@ -3,11 +3,31 @@ package store
 import (
 	"database/sql"
 
-	"github.com/JensonCode/tentrek/internal/model"
+	"github.com/JensonCode/tentrek/model"
 )
 
 type UserStore struct {
 	db *sql.DB
+}
+
+func scanRow(row *sql.Row) (*model.User, error) {
+	user := new(model.User)
+
+	err := row.Scan(
+		&user.UID,
+		&user.Email,
+		&user.Password,
+		&user.Username,
+		&user.Avatar,
+		&user.Provider,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (s *UserStore) InsertUser(req *model.CreateUserRequest) (*model.User, error) {
@@ -67,26 +87,6 @@ func (s *UserStore) FindByField(field string, value any) (*model.User, error) {
 	row := s.db.QueryRow(query, value)
 
 	user, err := scanRow(row)
-	if err != nil {
-		return nil, err
-	}
-
-	return user, nil
-}
-
-func scanRow(row *sql.Row) (*model.User, error) {
-	user := new(model.User)
-
-	err := row.Scan(
-		&user.UID,
-		&user.Email,
-		&user.Password,
-		&user.Username,
-		&user.Avatar,
-		&user.Provider,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	)
 	if err != nil {
 		return nil, err
 	}

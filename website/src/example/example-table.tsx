@@ -6,7 +6,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import { formatDate } from "@/lib/utils";
 
-export type ExampleTable = {
+type ExampleTable = {
   userAvatar: string;
 
   start: Date;

@@ -1,0 +1,29 @@
+# for dev use
+# do not leak
+services:
+  api:
+    container_name: api
+    image: tentrek-api:dev
+    build:
+      context: internal/.
+      dockerfile: dockerfile
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  db-data: {}
