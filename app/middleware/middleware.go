@@ -1,29 +1,35 @@
-package middelware
+package middleware
 
-// type Middleware func(HandlerFunc) HandlerFunc
+import (
+	"net/http"
+	"os"
+)
 
-// func MiddlewareChain(h HandlerFunc, middlewares ...Middleware) HandlerFunc {
-// 	for _, m := range middlewares {
-// 		h = m(h)
-// 	}
+type Middleware func(http.HandlerFunc) http.HandlerFunc
 
-// 	return h
-// }
+func Chain(h http.HandlerFunc, mws ...Middleware) http.HandlerFunc {
 
-// func WithCors(h HandlerFunc) HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) error {
+	for _, mw := range mws {
+		h = mw(h)
+	}
 
-// 		allowedOrigin := os.Getenv("APP_BASE_URL")
+	return h
+}
 
-// 		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-// 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-// 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+func WithCors(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-// 		if r.Method == "OPTIONS" {
-// 			w.WriteHeader(http.StatusOK)
-// 			return nil
-// 		}
+		allowedOrigin := os.Getenv("APP_BASE_URL")
 
-// 		return h(w, r)
-// 	}
-// }
+		w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		h(w, r)
+	}
+}

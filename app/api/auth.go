@@ -30,11 +30,11 @@ func (s *Server) AuthHandlers(w http.ResponseWriter, r *http.Request) error {
 	if service == "login" {
 		return h.handleLogin(w, r)
 	}
-	if service == "otp" {
-		return h.handleEmailVerification(w, r)
-	}
 	if service == "register" {
 		return h.handleRegister(w, r)
+	}
+	if service == "otp" {
+		return h.handleEmailVerification(w, r)
 	}
 
 	return nil
@@ -69,32 +69,6 @@ func (h *AuthHandler) handleLogin(w http.ResponseWriter, r *http.Request) error 
 
 func (h *AuthHandler) handleRegister(w http.ResponseWriter, r *http.Request) error {
 
-	req := new(model.EmailVerificationRequest)
-	err := ParseRequest(r, req)
-	if err != nil {
-		return err
-	}
-
-	newUserReq, err := h.store.AuthStore.DeleteOTP(req)
-	if err != nil {
-		return err
-	}
-
-	user, err := h.store.UserStore.InsertUser(newUserReq)
-	if err != nil {
-		return err
-	}
-
-	token, err := jwt.GenerateToken(user.UID)
-	if err != nil {
-		return err
-	}
-
-	return WriteResponse(w, http.StatusOK, map[string]string{"access_token": token})
-
-}
-
-func (h *AuthHandler) handleEmailVerification(w http.ResponseWriter, r *http.Request) error {
 	req := new(model.CreateUserRequest)
 	err := ParseRequest(r, req)
 	if err != nil {
@@ -117,5 +91,31 @@ func (h *AuthHandler) handleEmailVerification(w http.ResponseWriter, r *http.Req
 	uuid := h.store.AuthStore.StoreOTP(*req, otp)
 
 	return WriteResponse(w, http.StatusOK, map[string]string{"register_id": uuid})
+}
+
+func (h *AuthHandler) handleEmailVerification(w http.ResponseWriter, r *http.Request) error {
+
+	req := new(model.EmailVerificationRequest)
+	err := ParseRequest(r, req)
+	if err != nil {
+		return err
+	}
+
+	newUserReq, err := h.store.AuthStore.DeleteOTP(req)
+	if err != nil {
+		return err
+	}
+
+	user, err := h.store.UserStore.InsertUser(newUserReq)
+	if err != nil {
+		return err
+	}
+
+	token, err := jwt.GenerateToken(user.UID)
+	if err != nil {
+		return err
+	}
+
+	return WriteResponse(w, http.StatusOK, map[string]string{"access_token": token})
 
 }

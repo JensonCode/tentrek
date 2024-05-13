@@ -3,20 +3,22 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/JensonCode/tentrek/middleware"
 )
 
 type HandlerFunc func(http.ResponseWriter, *http.Request) error
 
-func serve(h HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+func serve(h HandlerFunc, mws ...middleware.Middleware) http.HandlerFunc {
+	return middleware.Chain(func(w http.ResponseWriter, r *http.Request) {
 		if err := h(w, r); err != nil {
 			WriteError(w, err)
 		}
-	}
+	}, mws...)
 }
 
 func (s *Server) RegisterRoutes() {
-	s.router.HandleFunc("/auth/user/{service}", serve(s.AuthHandlers))
+	s.router.HandleFunc("/auth/user/{service}", serve(s.AuthHandlers, middleware.WithCors))
 
 	//OAuth
 	s.router.HandleFunc("/auth/{provider}", serve(s.OAuthLogin))
