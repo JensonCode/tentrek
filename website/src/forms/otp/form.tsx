@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useEmailVerification } from "@/hooks/useEmailVerification";
 import { useCounter } from "@/hooks/useCounter";
 
-import { deleteCookies, setCookies } from "@/server/cookies";
+import { setCookies } from "@/server/cookies";
 
 import { OTPFormData, OTPFormSchema } from "./schema";
 
@@ -43,7 +43,6 @@ export default function OTPForm() {
     mutate(formData, {
       onSuccess: (token) => {
         setCookies("access_token", token);
-        deleteCookies("register_id");
         router.push("/");
       },
       onError: (err) => {

@@ -49,7 +49,7 @@ export default function RegisterForm() {
   const onSubmit = (formData: RegisterFormData) => {
     mutate(formData, {
       onSuccess: (registerID) => {
-        setCookies("register_id", registerID);
+        setCookies("register_id", registerID, 100);
         router.push("/auth/otp");
       },
       onError: (err) => {

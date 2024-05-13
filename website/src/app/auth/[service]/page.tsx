@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -23,10 +22,6 @@ export default function Page({ params }: PageProps) {
   const pathIndex = paths.findIndex((path) => params.service === path);
 
   if (pathIndex === -1) {
-    return notFound();
-  }
-
-  if (pathIndex === 2 && !cookies().get("register_id")) {
     return notFound();
   }
 
