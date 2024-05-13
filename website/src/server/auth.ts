@@ -4,20 +4,22 @@ import axios, { AxiosResponse } from "axios";
 
 import { env } from "@/env";
 
-import { LoginFormData } from "@/schema/loginForm";
-import { RegisterFormData } from "@/schema/registerForm";
-import { OTPFormData } from "@/schema/otpForm";
+import { LoginFormData } from "@/forms/login/schema";
+import { RegisterFormData } from "@/forms/register/schema";
+import { OTPFormData } from "@/forms/otp/schema";
 import { cookies } from "next/headers";
 import { getServerError } from "./errors";
 
 const Routes = {
   login: "/auth/user/login",
-  otp: "/auth/user/otp",
   register: "/auth/user/register",
+  emailVerification: "/auth/user/otp",
 };
 
+type AuthRouteReponse<T> = AxiosResponse<T | { error: string }>;
+
 export const userLogin = async (formData: LoginFormData): Promise<string> => {
-  type LoginResponse = AxiosResponse<{
+  type LoginResponse = AuthRouteReponse<{
     access_token: string;
   }>;
 
@@ -27,7 +29,7 @@ export const userLogin = async (formData: LoginFormData): Promise<string> => {
       formData,
     );
 
-    if (!res.data.access_token) {
+    if ("error" in res.data) {
       throw res.data;
     }
 
@@ -37,16 +39,16 @@ export const userLogin = async (formData: LoginFormData): Promise<string> => {
   }
 };
 
-export const sendOTPEmail = async (
+export const userRegister = async (
   formData: RegisterFormData,
 ): Promise<string> => {
-  type RegisterResponse = AxiosResponse<{
+  type RegisterResponse = AuthRouteReponse<{
     register_id: string;
   }>;
 
   try {
     const res: RegisterResponse = await axios.post(
-      env.NEXT_PUBLIC_API_BASE_URL + Routes.otp,
+      env.NEXT_PUBLIC_API_BASE_URL + Routes.register,
       {
         email: formData.email,
         password: formData.password,
@@ -54,29 +56,37 @@ export const sendOTPEmail = async (
       },
     );
 
+    if ("error" in res.data) {
+      throw res.data;
+    }
+
     return res.data.register_id;
   } catch (err) {
     throw getServerError(err);
   }
 };
 
-export const userRegister = async (formData: OTPFormData): Promise<string> => {
-  type RegisterResponse = AxiosResponse<{
+export const emailVerification = async (
+  formData: OTPFormData,
+): Promise<string> => {
+  type verificationResponse = AuthRouteReponse<{
     access_token: string;
   }>;
 
   try {
     const registerID = cookies().get("register_id")?.value;
 
-    const requestBody = {
-      otp: formData.otp,
-      register_id: registerID,
-    };
-
-    const res: RegisterResponse = await axios.post(
-      env.NEXT_PUBLIC_API_BASE_URL + Routes.register,
-      requestBody,
+    const res: verificationResponse = await axios.post(
+      env.NEXT_PUBLIC_API_BASE_URL + Routes.emailVerification,
+      {
+        otp: formData.otp,
+        register_id: registerID,
+      },
     );
+
+    if ("error" in res.data) {
+      throw res.data;
+    }
 
     return res.data.access_token;
   } catch (err) {

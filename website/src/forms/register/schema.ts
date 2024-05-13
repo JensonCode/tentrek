@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const registerFormSchema = z
+export const registerFormSchema = z
   .object({
     email: z
       .string()
@@ -21,23 +21,4 @@ const registerFormSchema = z
     path: ["confirmPassword"],
   });
 
-const registerFormFields = [
-  {
-    name: "email",
-    label: "Email",
-    type: "email",
-  },
-  {
-    name: "password",
-    label: "Password",
-    type: "password",
-  },
-  {
-    name: "confirmPassword",
-    label: "Confirm Password",
-    type: "password",
-  },
-];
-
-export { registerFormSchema, registerFormFields };
 export type RegisterFormData = z.infer<typeof registerFormSchema>;

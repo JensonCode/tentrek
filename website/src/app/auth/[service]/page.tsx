@@ -4,8 +4,11 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import LoginForm from "@/forms/login";
+
 import { env } from "@/env";
+import LoginForm from "@/forms/login/form";
+import RegisterForm from "@/forms/register/form";
+import OTPForm from "@/forms/otp/form";
 
 type PageProps = {
   params: {
@@ -35,9 +38,9 @@ export default function Page({ params }: PageProps) {
       {pathIndex === 0 ? (
         <LoginForm />
       ) : pathIndex === 1 ? (
-        <LoginForm />
+        <RegisterForm />
       ) : (
-        <LoginForm />
+        <OTPForm />
       )}
 
       {pathIndex !== 2 && (

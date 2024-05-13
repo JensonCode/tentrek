@@ -1,19 +1,21 @@
 "use client";
 
 import React, { useState } from "react";
-import { Form } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import FormInput, { Field } from "../components/form-input";
-import { Button } from "../components/ui/button";
-import Link from "next/link";
-import { LoginFormData, loginFormSchema } from "@/schema/loginForm";
-import { useLogin } from "@/hooks/mutations/auth";
-import { useRouter } from "next/navigation";
+import { Form } from "@/components/ui/form";
+import FormInput, { Field } from "@/components/form-input";
+import { Button } from "@/components/ui/button";
+
+import { useLogin } from "@/hooks/useLogin";
 
 import { setCookies } from "@/server/cookies";
+
+import { LoginFormData, loginFormSchema } from "./schema";
 
 const loginFormFields: Field<LoginFormData>[] = [
   {
