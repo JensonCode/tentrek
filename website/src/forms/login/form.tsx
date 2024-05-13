@@ -44,7 +44,7 @@ export default function LoginForm() {
   const onSubmit = (formData: LoginFormData) => {
     mutate(formData, {
       onSuccess: (token) => {
-        setCookies("access_token", token);
+        setCookies("access_token", token, 24 * 60 * 60);
         router.push("/");
       },
       onError: (err) => {

@@ -12,7 +12,7 @@ export const setCookies = (
     httpOnly: true,
   };
 
-  if (withExpirySecond) {
+  if (withExpirySecond !== undefined) {
     options.maxAge = withExpirySecond;
   }
 
