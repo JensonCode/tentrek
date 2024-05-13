@@ -18,9 +18,14 @@ func serve(h HandlerFunc, mws ...middleware.Middleware) http.HandlerFunc {
 }
 
 func (s *Server) RegisterRoutes() {
+
+	// user
+	s.router.HandleFunc("/user/{uid}", serve(s.UserUIDHandlers, middleware.WithCors, middleware.WithAuth))
+
+	// auth
 	s.router.HandleFunc("/auth/user/{service}", serve(s.AuthHandlers, middleware.WithCors))
 
-	//OAuth
+	// OAuth
 	s.router.HandleFunc("/auth/{provider}", serve(s.OAuthLogin))
 	s.router.HandleFunc("/auth/{provider}/callback", serve(s.OAuthCallback))
 	s.router.HandleFunc("/logout/{provider}", serve(s.OAuthLogout))
