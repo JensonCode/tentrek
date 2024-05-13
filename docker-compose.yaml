@@ -5,7 +5,7 @@ services:
     container_name: app
     image: tentrek-api:dev
     build:
-      context: app
+      context: app/.
       dockerfile: dockerfile
     env_file:
       - .env
