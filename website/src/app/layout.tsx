@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import ReactQueryProvider from "@/app/__components/ReactQueryProvider";
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
