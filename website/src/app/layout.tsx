@@ -3,7 +3,7 @@ import ReactQueryProvider from "@/app/__components/ReactQueryProvider";
 import "@/styles/globals.css";
 
 import { Inter } from "next/font/google";
-import { getUser } from "@/server/user";
+import { getUser } from "@/server/data/user";
 import { UserProvider } from "@/contexts/UserContext";
 
 const inter = Inter({

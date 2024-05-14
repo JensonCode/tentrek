@@ -1,5 +1,3 @@
-"use server";
-
 import axios, { AxiosResponse } from "axios";
 
 import { env } from "@/env";
@@ -7,8 +5,9 @@ import { env } from "@/env";
 import { LoginFormData } from "@/forms/login/schema";
 import { RegisterFormData } from "@/forms/register/schema";
 import { OTPFormData } from "@/forms/otp/schema";
-import { cookies } from "next/headers";
-import { getServerError } from "./errors";
+
+import { getServerError } from "../errors";
+import { getCookies } from "../cookies";
 
 const Routes = {
   login: "/auth/user/login",
@@ -74,7 +73,9 @@ export const emailVerification = async (
   }>;
 
   try {
-    const registerID = cookies().get("register_id")?.value;
+    const registerID = getCookies("register_id");
+
+    if (!registerID) throw Error("Register failed. Please retry.");
 
     const res: verificationResponse = await axios.post(
       env.NEXT_PUBLIC_API_BASE_URL + Routes.emailVerification,

@@ -1,4 +1,4 @@
-import { userLogin } from "@/server/auth";
+import { userLogin } from "@/server/data/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export const useLogin = () => {

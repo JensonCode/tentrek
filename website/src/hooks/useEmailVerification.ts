@@ -1,4 +1,4 @@
-import { emailVerification } from "@/server/auth";
+import { emailVerification } from "@/server/data/auth";
 import { useMutation } from "@tanstack/react-query";
 
 export const useEmailVerification = () => {

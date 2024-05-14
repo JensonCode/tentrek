@@ -18,3 +18,7 @@ export const setCookies = (
 
   cookies().set(key, value, options);
 };
+
+export const getCookies = (key: string) => {
+  return cookies().get(key)?.value;
+};
