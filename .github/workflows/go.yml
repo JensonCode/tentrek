@@ -25,13 +25,19 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.22'
+
+    - name: Change to app directory
+      run: cd app
 
     - name: Install dependencies
       run: go mod tidy
+      working-directory: ./app
 
     - name: Build
-      run: go build -v ./app
+      run: go build -v
+      working-directory: ./app
 
-    - name: Test
-      run: go test -v ./app/...
+    - name: Run tests
+      run: go test -v ./...
+      working-directory: ./app
